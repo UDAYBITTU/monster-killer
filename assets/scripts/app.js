@@ -7,7 +7,7 @@ let HEAL_PLAYER_VALUE = 20;
 let playerMaxHealth = 100;
 let playerCurrentHealth = playerMaxHealth;
 let monsterCurrentHealth = playerMaxHealth;
-
+let hasBonusLife = true;
 
 
 function attackMonster(mode) {
@@ -19,13 +19,25 @@ function attackPlayer(mode) {
 }
 
 function checkWinCase() {
-    if(monsterCurrentHealth <= 0 && playerCurrentHealth >0) {
-        alert('You Won!!!');
-    } else if(monsterCurrentHealth > 0 && playerCurrentHealth <= 0 ) {
-        alert('You Lose!!!');
-    } else if(monsterCurrentHealth <= 0 && playerCurrentHealth <= 0) {
-        alert('You have a Draw!!!');
+    if(hasBonusLife && playerCurrentHealth <= 0) {
+        ifBonusLife();
+    } else {
+        if(monsterCurrentHealth <= 0 && playerCurrentHealth > 0) {
+            alert('You Won!!!');
+        } else if(monsterCurrentHealth > 0 && playerCurrentHealth <= 0 ) {
+            alert('You Lose!!!');
+        } else if(monsterCurrentHealth <= 0 && playerCurrentHealth <= 0) {
+            alert('You have a Draw!!!');
+        }
     }
+}
+
+function ifBonusLife() {
+    alert('Opting for Bonus Life...');
+    alert('Player Healed... :) ');
+    healPlayer();
+    hasBonusLife = !hasBonusLife;
+    removeBonusLife(); 
 }
 
 
@@ -52,10 +64,10 @@ function strongAttack() {
 function healPlayer() {
     if(playerCurrentHealth === playerMaxHealth) {
         alert('Max Health Acheived');
-    }    else if(playerCurrentHealth < playerMaxHealth - HEAL_PLAYER_VALUE) {
+    } else if(playerCurrentHealth < playerMaxHealth - HEAL_PLAYER_VALUE) {
         increasePlayerHealth(HEAL_PLAYER_VALUE);
         playerCurrentHealth += HEAL_PLAYER_VALUE;
-    } else  if(playerCurrentHealth > playerMaxHealth - HEAL_PLAYER_VALUE) {
+    } else if(playerCurrentHealth > playerMaxHealth - HEAL_PLAYER_VALUE) {
         increasePlayerHealth(playerMaxHealth - playerCurrentHealth);
         playerCurrentHealth += playerMaxHealth - playerCurrentHealth;
     } 
