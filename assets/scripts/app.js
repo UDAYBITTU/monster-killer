@@ -2,6 +2,7 @@ let ATTACK_VALUE = 10;
 let STRONG_ATTACK_VALUE = 20;
 
 let MONSTER_ATTACK_VALUE = 14;
+let HEAL_PLAYER_VALUE = 20;
 
 let playerMaxHealth = 100;
 let playerCurrentHealth = playerMaxHealth;
@@ -48,7 +49,20 @@ function strongAttack() {
     checkWinCase();
 }
 
+function healPlayer() {
+    if(playerCurrentHealth === playerMaxHealth) {
+        alert('Max Health Acheived');
+    }    else if(playerCurrentHealth < playerMaxHealth - HEAL_PLAYER_VALUE) {
+        increasePlayerHealth(HEAL_PLAYER_VALUE);
+        playerCurrentHealth += HEAL_PLAYER_VALUE;
+    } else  if(playerCurrentHealth > playerMaxHealth - HEAL_PLAYER_VALUE) {
+        increasePlayerHealth(playerMaxHealth - playerCurrentHealth);
+        playerCurrentHealth += playerMaxHealth - playerCurrentHealth;
+    } 
+    checkWinCase();
+}
 
 
 attackBtn.addEventListener('click', attack);
 strongAttackBtn.addEventListener('click', strongAttack);
+healBtn.addEventListener('click', healPlayer);
