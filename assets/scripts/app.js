@@ -4,9 +4,9 @@ let STRONG_ATTACK_VALUE = 20;
 let MONSTER_ATTACK_VALUE = 14;
 let HEAL_PLAYER_VALUE = 20;
 
-let playerMaxHealth = 100;
-let playerCurrentHealth = playerMaxHealth;
-let monsterCurrentHealth = playerMaxHealth;
+let maxHealth = 100;
+let playerCurrentHealth = maxHealth;
+let monsterCurrentHealth = maxHealth;
 let hasBonusLife = true;
 
 
@@ -18,16 +18,28 @@ function attackPlayer(mode) {
     return dealPlayerDamage(mode)
 }
 
+function reset() {
+    playerCurrentHealth = maxHealth;
+    monsterCurrentHealth = maxHealth;
+    resetGame(maxHealth);
+    console.log(playerCurrentHealth);
+    console.log(monsterCurrentHealth);
+    
+}
+
 function checkWinCase() {
     if(hasBonusLife && playerCurrentHealth <= 0) {
         ifBonusLife();
     } else {
         if(monsterCurrentHealth <= 0 && playerCurrentHealth > 0) {
             alert('You Won!!!');
+            reset();
         } else if(monsterCurrentHealth > 0 && playerCurrentHealth <= 0 ) {
             alert('You Lose!!!');
+            reset();
         } else if(monsterCurrentHealth <= 0 && playerCurrentHealth <= 0) {
             alert('You have a Draw!!!');
+            reset();
         }
     }
 }
@@ -40,36 +52,37 @@ function ifBonusLife() {
     removeBonusLife(); 
 }
 
+function attackByPlayer(mode) {
+    const playerAttackIntensity = attackMonster(mode);
+    monsterCurrentHealth -=  playerAttackIntensity;
+}
+
+function attackByMonster(mode) {
+    const monsterAttackIntensity = attackPlayer(mode);   
+    playerCurrentHealth -= monsterAttackIntensity;
+}
 
 function attack() {
-    const playerAttackIntensity = attackMonster(ATTACK_VALUE);
-    monsterCurrentHealth -=  playerAttackIntensity;
-
-
-    const monsterAttackIntensity = attackPlayer(MONSTER_ATTACK_VALUE);   
-    playerCurrentHealth -= monsterAttackIntensity;
+    attackByPlayer(ATTACK_VALUE);
+    attackByMonster(MONSTER_ATTACK_VALUE);
     checkWinCase();
 }
 
 function strongAttack() {
-    const playerAttackIntensity = attackMonster(STRONG_ATTACK_VALUE);
-    monsterCurrentHealth -=  playerAttackIntensity;
-
-
-    const monsterAttackIntensity = attackPlayer(MONSTER_ATTACK_VALUE);   
-    playerCurrentHealth -= monsterAttackIntensity;
+    attackByPlayer(STRONG_ATTACK_VALUE);
+    attackByMonster(MONSTER_ATTACK_VALUE);
     checkWinCase();
 }
 
 function healPlayer() {
-    if(playerCurrentHealth === playerMaxHealth) {
+    if(playerCurrentHealth === maxHealth) {
         alert('Max Health Acheived');
-    } else if(playerCurrentHealth < playerMaxHealth - HEAL_PLAYER_VALUE) {
+    } else if(playerCurrentHealth < maxHealth - HEAL_PLAYER_VALUE) {
         increasePlayerHealth(HEAL_PLAYER_VALUE);
         playerCurrentHealth += HEAL_PLAYER_VALUE;
-    } else if(playerCurrentHealth > playerMaxHealth - HEAL_PLAYER_VALUE) {
-        increasePlayerHealth(playerMaxHealth - playerCurrentHealth);
-        playerCurrentHealth += playerMaxHealth - playerCurrentHealth;
+    } else if(playerCurrentHealth > maxHealth - HEAL_PLAYER_VALUE) {
+        increasePlayerHealth(maxHealth - playerCurrentHealth);
+        playerCurrentHealth += maxHealth - playerCurrentHealth;
     } 
     checkWinCase();
 }
